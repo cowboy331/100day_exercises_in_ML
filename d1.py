@@ -16,11 +16,11 @@ print(Y)
 from sklearn.preprocessing import Imputer
 
 Imputer = Imputer(missing_values='NaN', strategy="mean", axis=0)    #对于缺失值，用均值替换，指定数轴为列
-Imputer = Imputer.fit(X[:, 1:3])    #对2-4列，应用imputer
-X[:, 1:3] = Imputer.transform(X[:, 1:3])    #对2-4列，将填补后的数据代替原空缺数据
+Imputer = Imputer.fit(X[:, 1:3])    #对2/3列，创建一个转换器imputer
+X[:, 1:3] = Imputer.transform(X[:, 1:3])    #对2-4列，用转换器对数据进行转换，代替原空缺数据
 print("--------------------------------------")
 print("step 3:Handing the missing data")
-print("step 2")
+#print("step 2")
 print("X")
 print(X)
 
@@ -37,11 +37,11 @@ LabelEncoder()
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 
 LabelEncoder_X = LabelEncoder()
-X[:, 0] = LabelEncoder_X.fit_transform(X[:, 0])
+X[:, 0] = LabelEncoder_X.fit_transform(X[:, 0])     #自变量第一列转为连续的数值变量
 
 # Creating a dummy variable
 OnehotEncoder = OneHotEncoder(categorical_features=[0])
-X = OnehotEncoder.fit_transform(X).toarray()
+X = OnehotEncoder.fit_transform(X).toarray()    #自变量进行独热编码
 LabelEncoder_Y = LabelEncoder()
 Y = LabelEncoder_Y.fit_transform(Y)
 print("----------------------------------------")
@@ -52,8 +52,12 @@ print("Y")
 print(Y)
 
 # 5 Splitting the datasets into training sets and Test sets
-from sklearn.cross_validation import train_test_split
-
+#from sklearn.cross_validation import train_test_split
+#会有在0.18版本中，cross_validation被废弃的warning
+from sklearn.model_selection import train_test_split
+#X、Y can be list,numpy arrays, scipy-sparse matrices or pandas dataframe,
+#test_size:float, int, or None, optional(default=0.25),
+# #If int, represents the absolute number of test samples
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
 print('-----------------------------------------')
 print('step 5:Splitting the datasets into training sets and Test sets')
@@ -68,7 +72,8 @@ print(Y_test)
 
 # Feature Scaling
 from sklearn.preprocessing import StandardScaler
-
+#实用类StandarScaler，标准化，将特征数据的分布调整成标准正太分布。
+#它可以在训练数据集上做了标准转换操作之后，把相同的转换应用到测试训练集中
 sc_X = StandardScaler()
 X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.fit_transform(X_test)
