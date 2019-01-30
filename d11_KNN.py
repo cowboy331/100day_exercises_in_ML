@@ -21,21 +21,18 @@ Y = dataset.iloc[:, 4].values
 
 # 将数据集分为训练集和测试集
 from sklearn.model_selection import train_test_split
-
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=0)
 
 # 特征缩放
 from sklearn.preprocessing import StandardScaler
-
 sc = StandardScaler()
 x_train = sc.fit_transform(x_train)
 x_test = sc.fit_transform(x_test)
 
 # 2 Logistic Regression Model
-# 将逻辑回归应用于训练集
-from sklearn.linear_model import LogisticRegression
-
-classifier = LogisticRegression()
+# 使用K-NN对训练集数据进行训练
+from sklearn.neighbors import KNeighborsClassifier
+classifier = KNeighborsClassifier()
 classifier.fit(x_train, y_train)
 
 # 3 Predicting
@@ -43,10 +40,25 @@ classifier.fit(x_train, y_train)
 y_pred = classifier.predict(x_test)
 
 # 4 Evaluating the Predection
-# 评估预测
-from sklearn.metrics import confusion_matrix
+# 生成混淆矩阵，评估预测
+# 准确率： 所有识别为”1”的数据中，正确的比率是多少。
+# 召回率： 所有样本为1的数据中，最后真正识别出1的比率。
 
+# 对于数据测试结果有下面4种情况：
+# TP: 预测为正， 实现为正
+# FP: 预测为正， 实现为负
+# FN: 预测为负，实现为正
+# TN: 预测为负， 实现为负
+
+# 准确率： TP / (TP + FP)
+# 召回率： TP(TP + FN)
+# F1 - score: 2 * TP / (2 * TP + FP + FN)
+
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 cm = confusion_matrix(y_test, y_pred)
+print(cm)
+print(classification_report(y_test,y_pred))
 
 # 5 Visualization
 from matplotlib.colors import ListedColormap
