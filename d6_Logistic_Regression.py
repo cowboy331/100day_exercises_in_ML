@@ -49,7 +49,8 @@ x_set, y_set = x_train, y_train
 # 画网格
 X1, X2 = np.meshgrid(np.arange(start=x_set[:, 0].min() - 1, stop=x_set[:, 0].max() + 1, step=0.01),
                      np.arange(start=x_set[:, 1].min() - 1, stop=x_set[:, 1].max() + 1, step=0.01))
-# contour和contourf都是画三维等高线图的，不同点在于contourf会对等高线间的区域进行填充
+# contour和contourf都是画三维等高线图的，不同点在于contourf会对等高线间的区域进行填充。The alpha blending value, between 0 (transparent) and 1 (opaque).
+# numpy中的ravel()、flatten()、squeeze()都有将多维数组转换为一维数组的功能
 plt.contourf(X1, X2, classifier.predict(np.array([X1.ravel(), X2.ravel()]).T).reshape(X1.shape),
              alpha=0.75, cmap=ListedColormap(('red', 'green')))
 # 画坐标
